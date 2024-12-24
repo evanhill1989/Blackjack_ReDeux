@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blackjack Game</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Wager Screen -->
+    <div id="wager-view" class="view active">
+      <h1>Place Your Bet</h1>
+      <div class="bankroll">
+        <p>Bankroll: <span id="bankroll-amount">$1000</span></p>
+      </div>
+      <form id="wager-form">
+        <label for="wager-input">Enter Wager:</label>
+        <input type="number" id="wager-input" min="1" max="1000" required />
+        <button type="submit">Submit Wager</button>
+      </form>
+    </div>
+
+    <!-- Gameboard View -->
+    <div id="gameboard-view" class="view hidden">
+      <div class="game-info">
+        <p>Bankroll: <span id="game-bankroll-amount">$1000</span></p>
+        <p>Wager: <span id="current-wager">$0</span></p>
+      </div>
+      <div class="dealer-hand">
+        <h2>Dealer's Hand</h2>
+        <div id="dealer-cards" class="cards"></div>
+      </div>
+      <div class="user-hand">
+        <h2>Your Hand</h2>
+        <div id="user-cards" class="cards"></div>
+      </div>
+      <button id="hit-button">Hit</button>
+      <button id="stand-button">Stand</button>
+    </div>
+
+    <script type="module" src="script.js"></script>
+  </body>
+</html>
