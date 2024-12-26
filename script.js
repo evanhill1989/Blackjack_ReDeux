@@ -3,7 +3,10 @@ import {
   updateBankrollDisplay,
   updateWagerDisplay,
   switchToGameboardView,
+  buildDeck,
 } from "./ui.js";
+
+import { dealInitialCards, shuffleDeck } from "./gameLogic.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // Select form and input
@@ -18,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
 
     // Capture wager value
-    const wager = parseInt(wagerInput.value, 10);
+    const wager = parseInt(wagerInput.value, 10) || 50;
     if (wager > 0 && wager <= state.bankroll) {
       state.currentWager = wager;
       state.bankroll -= wager;
@@ -29,6 +32,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Switch views
       switchToGameboardView();
+
+      shuffleDeck();
+      console.log(state.deck);
+
+      buildDeck();
+      // Deal initial cards
+      // dealInitialCards();
+      // console.log(state);
     } else {
       alert("Please enter a valid wager amount.");
     }

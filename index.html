@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Blackjack Game</title>
     <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
   </head>
   <body>
     <!-- Wager Screen -->
@@ -15,7 +16,7 @@
       </div>
       <form id="wager-form">
         <label for="wager-input">Enter Wager:</label>
-        <input type="number" id="wager-input" min="1" max="1000" required />
+        <input type="number" id="wager-input" min="1" max="1000" value="50" />
         <button type="submit">Submit Wager</button>
       </form>
     </div>
@@ -26,13 +27,27 @@
         <p>Bankroll: <span id="game-bankroll-amount">$1000</span></p>
         <p>Wager: <span id="current-wager">$0</span></p>
       </div>
+      <div class="deck" id="deck"></div>
       <div class="dealer-hand">
         <h2>Dealer's Hand</h2>
         <div id="dealer-cards" class="cards"></div>
       </div>
       <div class="user-hand">
         <h2>Your Hand</h2>
-        <div id="user-cards" class="cards"></div>
+        <div id="user-cards" class="cards">
+          <div class="card card-black">
+            <div class="card-suit card-suit-left">
+              <p>♥</p>
+              <p>A</p>
+            </div>
+            <div class="card-rank">A</div>
+            <div class="card-suit card-suit-right">
+              <p>♥</p>
+              <p>A</p>
+            </div>
+          </div>
+          <div class="card-back"></div>
+        </div>
       </div>
       <button id="hit-button">Hit</button>
       <button id="stand-button">Stand</button>
