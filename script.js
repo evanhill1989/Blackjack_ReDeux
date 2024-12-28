@@ -3,10 +3,16 @@ import {
   updateBankrollDisplay,
   updateWagerDisplay,
   switchToGameboardView,
-  buildDeck,
+  renderDeck,
 } from "./ui.js";
 
-import { dealInitialCards, shuffleDeck } from "./gameLogic.js";
+import { shuffleDeck, dealCard } from "./gameLogic.js";
+
+import { initializeSubscriptions } from "./subscriptions.js";
+
+initializeSubscriptions();
+
+const dealCardBtn = document.getElementById("deal-hand-button");
 
 document.addEventListener("DOMContentLoaded", () => {
   // Select form and input
@@ -14,32 +20,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const wagerInput = document.getElementById("wager-input");
 
   // Initialize UI
-  updateBankrollDisplay(state.bankroll);
+
+  shuffleDeck();
+  renderDeck();
 
   // Handle wager submission
   wagerForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    const { bankroll } = state.getState();
 
     // Capture wager value
     const wager = parseInt(wagerInput.value, 10) || 50;
-    if (wager > 0 && wager <= state.bankroll) {
-      state.currentWager = wager;
-      state.bankroll -= wager;
+    if (wager > 0 && wager <= bankroll) {
+      // Update state
+      const { bankroll, currentWager } = state.getState();
+      state.setState({ currentWager: wager, bankroll: bankroll - wager });
 
       // Update UI
-      updateBankrollDisplay(state.bankroll);
-      updateWagerDisplay(state.currentWager);
+      updateBankrollDisplay(bankroll);
+      updateWagerDisplay(currentWager);
 
       // Switch views
       switchToGameboardView();
 
-      shuffleDeck();
-      console.log(state.deck);
-
-      buildDeck();
-      // Deal initial cards
-      // dealInitialCards();
-      // console.log(state);
+      console.log(state);
     } else {
       alert("Please enter a valid wager amount.");
     }
@@ -48,3 +52,17 @@ document.addEventListener("DOMContentLoaded", () => {
     wagerInput.value = "";
   });
 });
+
+dealCardBtn.addEventListener("click", () => {
+  dealInitialCards();
+});
+
+export function dealInitialCards() {
+  for (let i = 0; i < 2; i++) {
+    dealCard("userHandOne");
+  }
+
+  for (let i = 0; i < 2; i++) {
+    dealCard("dealerHand");
+  }
+}

@@ -98,70 +98,38 @@ form {
   margin: 20px 0;
 }
 
-.card {
-  display: grid;
-  box-shadow: #2c3e50 0px 4px 6px -1px, #2c3e50 0px 2px 4px -1px;
-  /* place-content: center; */
-  place-items: center;
-  grid-template-columns: 1em 1fr 1em;
-  grid-template-rows: 1.5em 1fr 1.5em;
-  grid-template-areas:
-    "top-left . ."
-    ". rank ."
-    ". . btm-right";
-  background-color: white;
-  color: black;
+.card-container {
+  position: relative;
   width: 4em;
   height: 6em;
-  border-radius: 0.5rem;
-  border: 1px solid black;
-  z-index: 10;
+  perspective: 1000px;
+  border-radius: 5px;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  backface-visibility: hidden;
+  border-radius: 5px;
+  transition: transform 0.6s;
+}
+
+.card-front {
+  background-color: white;
+  transform: rotateY(180deg);
 }
 
 .card-back {
-  grid-area: cards;
-  width: 4em;
-  height: 6em;
   background-image: url("card-back-no-border.svg");
 }
 
-.card-div {
-  position: absolute;
-  opacity: 0;
+.card-container.flipped .card-front {
+  transform: rotateY(0deg);
 }
 
-.card-suit p {
-  font-size: var(--fs-100);
-  line-height: 1;
-}
-
-.card-rank {
-  grid-area: rank;
-  font-size: var(--fs-600);
-}
-
-.card-suit-left {
-  grid-area: top-left;
-  display: flex;
-  flex-direction: column;
-}
-
-.card-suit-right {
-  grid-area: btm-right;
-  display: flex;
-  flex-direction: column;
-  transform: rotateX(180deg) rotateY(180deg);
-}
-
-.card-suit-right-rank {
-}
-
-.card-red {
-  color: red;
-}
-
-.card-black {
-  color: black;
+.card-container.flipped .card-back {
+  transform: rotateY(180deg);
 }
 
 /* Buttons */

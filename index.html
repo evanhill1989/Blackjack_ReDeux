@@ -6,6 +6,7 @@
     <title>Blackjack Game</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   </head>
   <body>
     <!-- Wager Screen -->
@@ -26,6 +27,7 @@
       <div class="game-info">
         <p>Bankroll: <span id="game-bankroll-amount">$1000</span></p>
         <p>Wager: <span id="current-wager">$0</span></p>
+        <button id="deal-hand-button">Deal Hand</button>
       </div>
       <div class="deck" id="deck"></div>
       <div class="dealer-hand">
@@ -34,20 +36,7 @@
       </div>
       <div class="user-hand">
         <h2>Your Hand</h2>
-        <div id="user-cards" class="cards">
-          <div class="card card-black">
-            <div class="card-suit card-suit-left">
-              <p>♥</p>
-              <p>A</p>
-            </div>
-            <div class="card-rank">A</div>
-            <div class="card-suit card-suit-right">
-              <p>♥</p>
-              <p>A</p>
-            </div>
-          </div>
-          <div class="card-back"></div>
-        </div>
+        <div id="user-cards" class="cards"></div>
       </div>
       <button id="hit-button">Hit</button>
       <button id="stand-button">Stand</button>
