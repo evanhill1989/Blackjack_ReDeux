@@ -6,13 +6,14 @@ import {
   renderDeck,
 } from "./ui.js";
 
-import { shuffleDeck, dealCard } from "./gameLogic.js";
+import { shuffleDeck, dealCard, updateHandScores } from "./gameLogic.js";
 
 import { initializeSubscriptions } from "./subscriptions.js";
 
 initializeSubscriptions();
 
 const dealCardBtn = document.getElementById("deal-hand-button");
+const testBtn = document.getElementById("test-button");
 
 document.addEventListener("DOMContentLoaded", () => {
   // Select form and input
@@ -51,6 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
     // Reset input
     wagerInput.value = "";
   });
+});
+
+testBtn.addEventListener("click", () => {
+  updateHandScores();
+  console.log(state.getState());
 });
 
 dealCardBtn.addEventListener("click", () => {
