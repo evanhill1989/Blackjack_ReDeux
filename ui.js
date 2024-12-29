@@ -5,7 +5,10 @@ const wagerView = document.getElementById("wager-view");
 const gameboardView = document.getElementById("gameboard-view");
 const bankrollDisplay = document.getElementById("bankroll-amount");
 const currentWagerDisplay = document.getElementById("current-wager");
-const deck = document.getElementById("deck");
+const deckElement = document.getElementById("deck");
+const dealerHand = document.getElementById("dealer-hand");
+const focusHand = document.getElementById("focus-hand");
+const nonFocusHand = document.getElementById("non-focus-hand");
 const dealerHandScore = document.getElementById("dealer-hand-score");
 const focusHandScore = document.getElementById("focus-hand-score");
 const nonFocusHandScore = document.getElementById("non-focus-hand-score");
@@ -80,18 +83,34 @@ export function switchToGameboardView() {
   gameboardView.classList.add("active");
 }
 
-export function renderHand(handKey) {
-  const { [handKey]: handState } = state.getState(); // Destructure the specific hand's state
-  console.log(handKey);
+export function animateDealCard(targetHandKey) {
+  // Select the deck and target hand elements
+  let targetHandId;
+  if (targetHandKey === "dealerHand") {
+    targetHandId = "dealer-hand";
+  } else if (targetHandKey === "focusHand") {
+    targetHandId = "focus-hand";
+  } else if (targetHandKey === "nonFocusHand") {
+    targetHandId = "non-focus-hand";
+  }
 
-  const handId = handKey === "userHandOne" ? "user-cards" : "dealer-cards";
-  const handElement = document.getElementById(handId);
-  handElement.innerHTML = ""; // Clear the current hand
+  const targetHandElement = document.getElementById(targetHandId);
 
-  handState.cards.forEach((card) => {
-    const cardElement = createCard(card);
-    handElement.appendChild(cardElement);
-  });
+  // Ensure there is at least one card in the deck
+  if (deckElement.children.length === 0) {
+    console.error("The deck is empty, no card to deal!");
+    return;
+  }
+
+  // Get the top card from the deck
+  const topCardElement = deckElement.lastElementChild;
+
+  // Move the card to the target hand
+  targetHandElement.appendChild(topCardElement);
+
+  // Optionally, add a simple animation for visual effect
+  topCardElement.style.transition = "transform 3s ease-in-out";
+  topCardElement.style.transform = "translate(0, 0)"; // Reset any transformations
 }
 
 export function renderDeck() {

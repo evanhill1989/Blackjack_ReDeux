@@ -4,9 +4,10 @@ import {
   updateWagerDisplay,
   switchToGameboardView,
   renderDeck,
+  animateDealCard,
 } from "./ui.js";
 
-import { shuffleDeck, dealCard, updateHandScores } from "./gameLogic.js";
+import { shuffleDeck, updateHandScores } from "./gameLogic.js";
 
 import { initializeSubscriptions } from "./subscriptions.js";
 
@@ -66,11 +67,17 @@ dealCardBtn.addEventListener("click", () => {
 });
 
 export function dealInitialCards() {
-  for (let i = 0; i < 2; i++) {
-    dealCard("userHandOne");
-  }
+  dealCard("focusHand", "userHandOne");
+  // for (let i = 0; i < 2; i++) {
+  //   dealCard("userHandOne");
+  // }
 
-  for (let i = 0; i < 2; i++) {
-    dealCard("dealerHand");
-  }
+  // for (let i = 0; i < 2; i++) {
+  //   dealCard("dealerHand");
+  // }
+}
+
+function dealCard(handKey, hand) {
+  console.log("Dealing card to", handKey);
+  animateDealCard(handKey);
 }

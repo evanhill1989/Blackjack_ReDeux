@@ -5,7 +5,6 @@ import {
   updateWagerDisplay,
   updateScoresDisplay,
   renderDeck,
-  renderHand,
 } from "./ui.js";
 
 import {} from "./gameLogic.js";
@@ -15,6 +14,4 @@ export function initializeSubscriptions() {
   state.subscribe(updateBankrollDisplay);
   state.subscribe(updateWagerDisplay);
   state.subscribe(renderDeck);
-  state.subscribe(() => renderHand("dealerHand"));
-  state.subscribe(() => renderHand("userHandOne"));
 }
