@@ -28,6 +28,8 @@ export function dealCard(handKey) {
 }
 
 export function updateHandScores() {
+  // TODO: why can't this be a subscription without too much recursion?
+
   const { userHandOne, userHandTwo, dealerHand } = state.getState();
 
   const updatedUserHandOne = {
@@ -44,9 +46,9 @@ export function updateHandScores() {
   };
 
   state.setState({
-    updatedUserHandOne,
-    updatedUserHandTwo,
-    updatedDealerHand,
+    userHandOne: updatedUserHandOne,
+    userHandTwo: updatedUserHandTwo,
+    dealerHand: updatedDealerHand,
   });
 }
 

@@ -6,12 +6,29 @@ const gameboardView = document.getElementById("gameboard-view");
 const bankrollDisplay = document.getElementById("bankroll-amount");
 const currentWagerDisplay = document.getElementById("current-wager");
 const deck = document.getElementById("deck");
-// UI Functions
+const dealerHandScore = document.getElementById("dealer-hand-score");
+const focusHandScore = document.getElementById("focus-hand-score");
+const nonFocusHandScore = document.getElementById("non-focus-hand-score");
+
+// Display Functions
 export function updateBankrollDisplay() {
   const { bankroll } = state.getState();
   bankrollDisplay.textContent = `$${bankroll}`;
 }
 
+export function updateWagerDisplay() {
+  const { currentWager } = state.getState();
+  currentWagerDisplay.textContent = `$${currentWager}`;
+}
+
+export function updateScoresDisplay() {
+  const { dealerHand } = state.getState();
+  dealerHandScore.textContent = `Dealer: ${dealerHand.score}`;
+  focusHandScore.textContent = `Focus: ${state.focusHand.score}`;
+  nonFocusHandScore.textContent = `Non-Focus: ${state.nonFocusHand.score}`;
+}
+
+// Game Element Rendering Functions
 export function createCard(card) {
   const cardContainer = document.createElement("div");
   cardContainer.classList.add("card-container");
@@ -54,11 +71,6 @@ function getCardColor(suit) {
   } else {
     return "black";
   }
-}
-
-export function updateWagerDisplay() {
-  const { currentWager } = state.getState();
-  currentWagerDisplay.textContent = `$${currentWager}`;
 }
 
 export function switchToGameboardView() {

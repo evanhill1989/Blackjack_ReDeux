@@ -30,15 +30,21 @@
         <button id="deal-hand-button">Deal Hand</button>
       </div>
       <div class="deck" id="deck"></div>
-      <div class="dealer-hand">
+      <div class="dealer-hand" id="dealer-hand">
         <h2>Dealer's Hand</h2>
         <div id="dealer-cards" class="cards"></div>
+        <p id="dealer-hand-score">?</p>
       </div>
-      <div class="focus-hand">
+      <div class="focus-hand" id="focus-hand">
         <h2>Your Hand</h2>
         <div id="user-cards" class="cards"></div>
+        <p id="focus-hand-score">0</p>
       </div>
-      <div class="non-focus-hand"></div>
+      <div class="non-focus-hand" id="non-focus-hand">
+        <h2>Off hand</h2>
+        <div id="non-focus-cards" class="cards"></div>
+        <p id="non-focus-hand-score">-</p>
+      </div>
       <button id="hit-button">Hit</button>
       <button id="stand-button">Stand</button>
       <button id="test-button">Test</button>

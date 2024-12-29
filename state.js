@@ -16,7 +16,8 @@ class State {
         cards: [],
         score: 0,
       },
-      // "♥", "♦", "♣", "♠"
+      focus: "userHandOne", // "userHandOne" or "userHandTwo"
+      nonFocus: "userHandTwo", // "userHandOne" or "userHandTwo"
       deck: [
         { suit: "♥", value: "2" },
         { suit: "♥", value: "3" },
@@ -75,6 +76,18 @@ class State {
     this.listeners = [];
   }
 
+  get focusHand() {
+    return this.state.focus === "userHandOne"
+      ? this.state.userHandOne
+      : this.state.userHandTwo;
+  }
+
+  get nonFocusHand() {
+    return this.state.focus === "userHandOne"
+      ? this.state.userHandTwo
+      : this.state.userHandOne;
+  }
+
   getState() {
     return this.state;
   }
@@ -94,14 +107,3 @@ class State {
 }
 
 export const state = new State();
-
-// Function to initialize/reset the state
-export function initializeGameState() {
-  state.setState({
-    currentWager: 0,
-    deck: [],
-    dealerHand: { cards: [], score: 0 },
-    userHand: { cards: [], score: 0 },
-    isGameOver: false,
-  });
-}

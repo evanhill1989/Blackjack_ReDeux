@@ -56,11 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 testBtn.addEventListener("click", () => {
   updateHandScores();
+  state.notify();
   console.log(state.getState());
 });
 
 dealCardBtn.addEventListener("click", () => {
   dealInitialCards();
+  updateHandScores();
 });
 
 export function dealInitialCards() {
