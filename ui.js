@@ -84,33 +84,82 @@ export function switchToGameboardView() {
 }
 
 export function animateDealCard(targetHandKey) {
-  // Select the deck and target hand elements
-  let targetHandId;
-  if (targetHandKey === "dealerHand") {
-    targetHandId = "dealer-hand";
-  } else if (targetHandKey === "focusHand") {
-    targetHandId = "focus-hand";
-  } else if (targetHandKey === "nonFocusHand") {
-    targetHandId = "non-focus-hand";
-  }
+  return new Promise((resolve, reject) => {
+    // Map target hand keys to their DOM element IDs
+    let targetHandId;
+    if (targetHandKey === "dealerHand") {
+      targetHandId = "dealer-hand";
+    } else if (targetHandKey === "focusHand") {
+      targetHandId = "focus-hand";
+    } else if (targetHandKey === "nonFocusHand") {
+      targetHandId = "non-focus-hand";
+    }
 
-  const targetHandElement = document.getElementById(targetHandId);
+    const targetHandElement = document.getElementById(targetHandId);
+    if (!targetHandElement) {
+      console.error(`Target hand element not found for key: ${targetHandKey}`);
+      reject(`Target hand element not found for key: ${targetHandKey}`);
+      return;
+    }
 
-  // Ensure there is at least one card in the deck
-  if (deckElement.children.length === 0) {
-    console.error("The deck is empty, no card to deal!");
-    return;
-  }
+    if (!deckElement || deckElement.children.length === 0) {
+      console.error("The deck is empty, no card to deal!");
+      reject("The deck is empty, no card to deal!");
+      return;
+    }
 
-  // Get the top card from the deck
-  const topCardElement = deckElement.lastElementChild;
+    const topCardElement = deckElement.lastElementChild;
+    if (!topCardElement) {
+      console.error("Top card element not found");
+      reject("Top card element not found");
+      return;
+    }
 
-  // Move the card to the target hand
-  targetHandElement.appendChild(topCardElement);
+    const deckRect = deckElement.getBoundingClientRect();
+    const targetRect = targetHandElement.getBoundingClientRect();
 
-  // Optionally, add a simple animation for visual effect
-  topCardElement.style.transition = "transform 3s ease-in-out";
-  topCardElement.style.transform = "translate(0, 0)"; // Reset any transformations
+    // Log bounding rects for debugging
+    console.log("Deck Rect:", deckRect);
+    console.log("Target Rect:", targetRect);
+
+    if (!deckRect || !targetRect) {
+      console.error("Invalid bounding client rects");
+      reject("Invalid bounding client rects");
+      return;
+    }
+
+    // Clone the top card for animation purposes
+    const animatedCard = topCardElement.cloneNode(true);
+    document.body.appendChild(animatedCard);
+
+    // Set the cloned card's initial position to match the top card
+    gsap.set(animatedCard, {
+      position: "absolute",
+      top: deckRect.top + "px",
+      left: deckRect.left + "px",
+      width: topCardElement.offsetWidth + "px",
+      height: topCardElement.offsetHeight + "px",
+      zIndex: 1000,
+    });
+
+    // Animate the card moving to the target hand
+    gsap.to(animatedCard, {
+      duration: 0.5,
+      top: targetRect.top + "px",
+      left: targetRect.left + "px",
+      onComplete: () => {
+        // Remove the animated card and append the actual card to the hand
+        animatedCard.remove();
+        targetHandElement.appendChild(topCardElement);
+
+        resolve(); // Resolve the promise when animation completes
+      },
+      onError: (err) => {
+        console.error("Error during animation:", err);
+        reject(err);
+      },
+    });
+  });
 }
 
 export function renderDeck() {

@@ -56,28 +56,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 testBtn.addEventListener("click", () => {
-  updateHandScores();
-  state.notify();
-  console.log(state.getState());
-});
-
-dealCardBtn.addEventListener("click", () => {
-  dealInitialCards();
-  updateHandScores();
-});
-
-export function dealInitialCards() {
   dealCard("focusHand", "userHandOne");
-  // for (let i = 0; i < 2; i++) {
-  //   dealCard("userHandOne");
-  // }
+});
 
-  // for (let i = 0; i < 2; i++) {
-  //   dealCard("dealerHand");
-  // }
-}
+dealCardBtn.addEventListener("click", async () => {
+  // Wait for the first dealCard to finish
+  await dealCard("focusHand", "userHandOne");
+  // Then deal the second card
+  await dealCard("focusHand", "userHandOne");
+});
 
 function dealCard(handKey, hand) {
   console.log("Dealing card to", handKey);
-  animateDealCard(handKey);
+  return animateDealCard(handKey);
 }

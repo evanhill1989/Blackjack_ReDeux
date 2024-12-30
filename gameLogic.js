@@ -12,21 +12,6 @@ export function shuffleDeck() {
   state.setState({ deck: shuffledDeck });
 }
 
-export function dealCard(handKey) {
-  const { deck, [handKey]: handState } = state.getState();
-
-  if (deck.length === 0) {
-    console.error("No more cards in the deck");
-    return null;
-  }
-
-  const dealtCard = deck.pop();
-  handState.cards.push(dealtCard);
-  state.setState({ deck, [handKey]: handState }); //
-
-  return dealtCard;
-}
-
 export function updateHandScores() {
   // TODO: why can't this be a subscription without too much recursion?
 
