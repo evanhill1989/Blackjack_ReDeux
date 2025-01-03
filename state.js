@@ -18,6 +18,7 @@ class State {
       },
       focus: "userHandOne", // "userHandOne" or "userHandTwo"
       nonFocus: "userHandTwo", // "userHandOne" or "userHandTwo"
+      // ♥   ♦   ♣   ♠
       deck: [
         { suit: "♥", value: "2" },
         { suit: "♥", value: "3" },

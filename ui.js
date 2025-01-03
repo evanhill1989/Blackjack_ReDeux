@@ -33,39 +33,33 @@ export function updateScoresDisplay() {
 
 // Game Element Rendering Functions
 export function createCard(card) {
+  const cardColor = getCardColor(card.suit); // Determine color based on the suit
+
+  // Create the card's HTML structure using a template literal
+  const cardHTML = `
+    <div class="card-container">
+      <div class="card card-back"></div>
+      <div class="card card-front">
+        <p class="card-num-topleft" style="color: ${cardColor};">${card.value}</p>
+        <p class="card-suit-topleft" style="color: ${cardColor};">${card.suit}</p>
+        <p class="card-suit-middle" style="color: ${cardColor};">${card.suit}</p>
+        <p class="card-suit-bottomright" style="color: ${cardColor};">${card.suit}</p>
+        <p class="card-num-bottomright" style="color: ${cardColor};">${card.value}</p>
+      </div>
+    </div>
+  `;
+
+  // Convert the HTML string into a DOM element
   const cardContainer = document.createElement("div");
-  cardContainer.classList.add("card-container");
+  cardContainer.innerHTML = cardHTML;
+  const cardElement = cardContainer.firstElementChild;
 
-  const cardBack = document.createElement("div");
-  cardBack.classList.add("card", "card-back");
-
-  const cardFront = document.createElement("div");
-  cardFront.classList.add("card", "card-front");
-
-  const cardValue = document.createElement("div");
-  cardValue.classList.add("card-value");
-  cardValue.textContent = card.value;
-
-  const cardSuit = document.createElement("div");
-  cardSuit.classList.add("card-suit");
-  cardSuit.textContent = card.suit;
-
-  // Set the color based on the card suit
-  const cardColor = getCardColor(card.suit);
-  cardValue.style.color = cardColor;
-  cardSuit.style.color = cardColor;
-
-  cardFront.appendChild(cardValue);
-  cardFront.appendChild(cardSuit);
-
-  cardContainer.appendChild(cardBack);
-  cardContainer.appendChild(cardFront);
-
-  cardContainer.addEventListener("click", () => {
-    cardContainer.classList.toggle("flipped");
+  // Add the flipping functionality
+  cardElement.addEventListener("click", () => {
+    cardElement.classList.toggle("flipped");
   });
 
-  return cardContainer;
+  return cardElement;
 }
 
 function getCardColor(suit) {
