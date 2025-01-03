@@ -3,6 +3,7 @@ import {
   updateBankrollDisplay,
   updateWagerDisplay,
   switchToGameboardView,
+  toggleView,
   renderDeck,
   animateDealCard,
 } from "./ui.js";
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize UI
 
   shuffleDeck();
-  renderDeck();
+  // renderDeck();
 
   // Handle wager submission
   wagerForm.addEventListener("submit", (event) => {
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateWagerDisplay(currentWager);
 
       // Switch views
-      switchToGameboardView();
+      toggleView();
 
       console.log(state);
     } else {
@@ -61,9 +62,7 @@ testBtn.addEventListener("click", () => {
 
 dealCardBtn.addEventListener("click", async () => {
   // Wait for the first dealCard to finish
-  await dealCard("focusHand", "userHandOne");
-  // Then deal the second card
-  await dealCard("focusHand", "userHandOne");
+  dealCard("focusHand", "userHandOne");
 });
 
 function dealCard(handKey, hand) {

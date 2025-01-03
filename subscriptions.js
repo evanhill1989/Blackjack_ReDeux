@@ -13,5 +13,4 @@ export function initializeSubscriptions() {
   state.subscribe(updateScoresDisplay);
   state.subscribe(updateBankrollDisplay);
   state.subscribe(updateWagerDisplay);
-  state.subscribe(renderDeck);
 }
