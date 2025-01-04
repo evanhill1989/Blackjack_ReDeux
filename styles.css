@@ -89,15 +89,13 @@ form {
 /* Gameboard Styles */
 .gameboard {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 1fr 3fr 1fr;
   grid-template-areas:
-    "game-info game-info"
-    "deck deck"
-    "dealer-hand dealer-hand"
-    "focus-hand focus-hand"
-    ". non-focus-hand"
-    "gameboard-btns gameboard-btns";
+    ". game-info ."
+    ". hands-container ."
+    "gameboard-btns gameboard-btns gameboard-btns";
   place-items: center;
+  max-width: 400px;
 }
 
 .game-info {
@@ -108,8 +106,16 @@ form {
   margin-bottom: 20px;
 }
 
+.hands-container {
+  grid-area: hands-container;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .deck {
   grid-area: deck;
+  place-self: center;
 }
 
 .dealer-hand {
@@ -122,6 +128,8 @@ form {
 
 .non-focus-hand {
   grid-area: non-focus-hand;
+  justify-self: end;
+  align-self: end;
 }
 
 .gameboard-btns {
@@ -130,12 +138,8 @@ form {
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
-  /* Adjust 50px to your card width */
-  grid-auto-flow: column; /* Ensure cards are placed in the same row */
-  gap: -40px; /* Negative gap to create the overlapping effect */
+  grid-template-columns: repeat(12, minmax(10px, 1fr));
   position: relative;
-  overflow: hidden;
 }
 
 .non-focus-cards {
@@ -158,7 +162,7 @@ form {
   width: 100%;
   height: 100%;
   position: absolute;
-  /* backface-visibility: hidden; */
+  backface-visibility: hidden;
   border-radius: 5px;
   transition: transform 0.6s;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -191,12 +195,12 @@ form {
 /* Card Front details */
 /* grid-columns are flipped because of transform */
 .card-num-topleft {
-  grid-column: 4;
+  grid-column: 2;
   grid-row: 2;
 }
 
 .card-suit-topleft {
-  grid-column: 4;
+  grid-column: 2;
   grid-row: 3;
 }
 
@@ -210,7 +214,7 @@ form {
 }
 
 .card-num-bottomright {
-  grid-column: 2;
+  grid-column: 4;
   grid-row: 6;
   /* flip vertically */
   transform: rotate(180deg);
@@ -218,7 +222,7 @@ form {
 }
 
 .card-suit-bottomright {
-  grid-column: 2;
+  grid-column: 4;
   grid-row: 5;
   transform: rotate(180deg);
   align-self: end;

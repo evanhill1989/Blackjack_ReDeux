@@ -8,8 +8,36 @@ export function shuffleDeck() {
     return;
   }
 
-  const shuffledDeck = [...deck].sort(() => Math.random() - 0.5);
+  const shuffledDeck = deck;
+
+  for (let i = shuffledDeck.length - 1; i > 0; i--) {
+    // Generate a random index between 0 and i (inclusive)
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+
+    // Swap elements at i and randomIndex
+    [shuffledDeck[i], shuffledDeck[randomIndex]] = [
+      shuffledDeck[randomIndex],
+      deck[i],
+    ];
+  }
+
   state.setState({ deck: shuffledDeck });
+}
+
+export function getTopCard() {
+  const { deck } = state.getState();
+
+  if (!deck || deck.length === 0) {
+    console.error("Deck is not defined or empty");
+    return;
+  }
+
+  const topCard = deck[deck.length - 1];
+  const updatedDeck = deck.slice(0, deck.length - 1);
+
+  state.setState({ deck: updatedDeck });
+
+  return topCard;
 }
 
 export function updateHandScores() {

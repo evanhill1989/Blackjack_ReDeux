@@ -6,9 +6,10 @@ import {
   toggleView,
   renderDeck,
   animateDealCard,
+  testElement,
 } from "./ui.js";
 
-import { shuffleDeck, updateHandScores } from "./gameLogic.js";
+import { shuffleDeck, updateHandScores, getTopCard } from "./gameLogic.js";
 
 import { initializeSubscriptions } from "./subscriptions.js";
 
@@ -25,7 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize UI
 
   shuffleDeck();
-  // renderDeck();
+  shuffleDeck();
+  shuffleDeck();
 
   // Handle wager submission
   wagerForm.addEventListener("submit", (event) => {
@@ -57,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 testBtn.addEventListener("click", () => {
+  // testElement();
   dealCard("focusHand", "userHandOne");
 });
 
@@ -66,6 +69,7 @@ dealCardBtn.addEventListener("click", async () => {
 });
 
 function dealCard(handKey, hand) {
-  console.log("Dealing card to", handKey);
-  return animateDealCard(handKey);
+  const topCard = getTopCard();
+  console.log(topCard);
+  return animateDealCard(topCard, handKey, hand);
 }
