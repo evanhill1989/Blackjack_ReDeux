@@ -52,23 +52,129 @@
           </div>
         </div>
         <div class="dealer-hand" id="dealer-hand">
-          <h2>Dealer's Hand</h2>
-          <div id="dealer-cards" class="cards"></div>
-          <p id="dealer-hand-score">?</p>
-        </div>
-        <div class="userhands">
-          <div class="focus-hand" id="focus-hand">
-            <h2>Your Hand</h2>
-            <div id="user-cards" class="cards"></div>
-            <p id="focus-hand-score">0</p>
-          </div>
-          <div class="non-focus-hand" id="non-focus-hand">
-            <h2>Off hand</h2>
-            <div id="non-focus-cards" class="cards"></div>
-            <p id="non-focus-hand-score">-</p>
+          <div class="hand-container">
+            <div id="dealer-cards" class="cards">
+              <div class="card-container">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+              <div class="card-container">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+            </div>
+
+            <p id="dealer-hand-score">?</p>
           </div>
         </div>
 
+        <div class="focus-hand" id="focus-hand">
+          <div class="hand-container">
+            <div id="user-cards" class="cards">
+              <div class="card-container focus">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+              <div class="card-container focus">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+              <div class="card-container focus">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+            </div>
+            <p id="focus-hand-score">0</p>
+          </div>
+        </div>
+
+        <div class="non-focus-hand" id="non-focus-hand">
+          <div class="hand-container">
+            <div id="non-focus-cards" class="cards non-focus-cards">
+              <div class="card-container non-focus-container">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+              <div class="card-container non-focus-container">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+              <div class="card-container non-focus-container">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+              <div class="card-container non-focus-container">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+              <div class="card-container non-focus-container">
+                <div class="card card-back"></div>
+                <div class="card card-front">
+                  <p class="card-num-topleft">8</p>
+                  <p class="card-suit-topleft">♦</p>
+                  <p class="card-suit-middle">♦</p>
+                  <p class="card-suit-bottomright">♦</p>
+                  <p class="card-num-bottomright">8</p>
+                </div>
+              </div>
+            </div>
+            <p id="non-focus-hand-score">-</p>
+          </div>
+        </div>
         <div class="gameboard-btns">
           <button id="hit-button">Hit</button>
           <button id="stand-button">Stand</button>
