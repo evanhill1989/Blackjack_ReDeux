@@ -1,4 +1,5 @@
 import { state } from "./state.js";
+import { animateDealCard } from "./ui.js";
 
 export function shuffleDeck() {
   const { deck } = state.getState();
@@ -127,4 +128,33 @@ export function computeHandScore(cards) {
   }
 
   return score;
+}
+
+// End game logic
+export function dealerAction() {
+  while (state.getState().dealerHand.score < 17) {
+    const topCard = getTopCard();
+    dealDealerCard(topCard);
+
+    // Ensure the state is updated with the new score after the card is dealt
+    const { dealerHand } = state.getState();
+    console.log(`Dealer's new score: ${dealerHand.score}`);
+  }
+
+  showdown();
+}
+
+function dealDealerCard(topCard) {
+  addCardToHand(topCard, "dealerHand");
+  updateHandScores();
+  return animateDealCard(topCard, "dealerHand");
+}
+
+function showdown() {
+  compareScores();
+}
+
+function compareScores() {
+  let focusScore = state.focusHand.score;
+  console.log(focusScore, "focusScore");
 }

@@ -14,6 +14,7 @@ import {
   updateHandScores,
   getTopCard,
   addCardToHand,
+  dealerAction,
 } from "./gameLogic.js";
 
 import { initializeSubscriptions } from "./subscriptions.js";
@@ -26,6 +27,9 @@ const wagerForm = document.getElementById("wager-form");
 const wagerInput = document.getElementById("wager-input");
 
 const hitBtn = document.getElementById("hit-btn");
+const standBtn = document.getElementById("stand-btn");
+const splitBtn = document.getElementById("split-btn");
+const doubleBtn = document.getElementById("double-btn");
 
 // Handle wager submission
 wagerForm.addEventListener("submit", (event) => {
@@ -77,6 +81,18 @@ hitBtn.addEventListener("click", () => {
   hit();
 });
 
+standBtn.addEventListener("click", () => {
+  stand();
+});
+
+splitBtn.addEventListener("click", () => {
+  split();
+});
+
+doubleBtn.addEventListener("click", () => {
+  double();
+});
+
 function dealCard(hand) {
   const topCard = getTopCard();
   addCardToHand(topCard, hand);
@@ -86,4 +102,30 @@ function dealCard(hand) {
 
 function hit() {
   dealCard("focusHand");
+}
+
+function stand() {
+  console.log("stand");
+  dealerAction();
+  // end the game
+  // compare scores
+  // update bankroll
+  // reset game state
+}
+
+// function split() {
+//   console.log("split");
+// }
+
+function double() {
+  console.log("double");
+
+  //   // double the wager
+  //   // deal one card
+  //   // stand
+
+  //   // end the game
+  //   // compare scores
+  //   // update bankroll
+  //   // reset game state
 }

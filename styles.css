@@ -233,9 +233,3 @@ form {
 }
 
 /* Buttons */
-#hit-button,
-#stand-button {
-  margin: 10px;
-  padding: 10px 30px;
-  font-size: 1rem;
-}
