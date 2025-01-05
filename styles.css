@@ -71,9 +71,9 @@ form {
   display: none;
 }
 
-.active {
+/* .active {
   display: block;
-}
+} */
 
 /* Bankroll Display */
 .bankroll {

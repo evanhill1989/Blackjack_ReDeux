@@ -33,7 +33,6 @@ export function updateScoresDisplay() {
 
 // Game Element Rendering Functions
 export function createCard(card) {
-  console.log(card);
   const cardColor = getCardColor(card.suit); // Determine color based on the suit
 
   // Create the card's HTML structure using a template literal
@@ -64,15 +63,8 @@ export function createCard(card) {
 }
 
 export function animateDealCard(topCard, targetHandKey) {
-  // Select the deck and target hand elements
-  let targetHandElement;
-  if (targetHandKey === "dealerHand") {
-    targetHandElement = dealerCards;
-  } else if (targetHandKey === "focusHand") {
-    targetHandElement = focusCards;
-  } else if (targetHandKey === "nonFocusHand") {
-    targetHandElement = nonFocusCards;
-  }
+  let targetHandElement =
+    targetHandKey === "focusHand" ? focusCards : dealerCards;
 
   // Create the animated card and its clone
   const topCardElement = createCard(topCard);

@@ -9,16 +9,23 @@ import {
   testElement,
 } from "./ui.js";
 
-import { shuffleDeck, updateHandScores, getTopCard } from "./gameLogic.js";
+import {
+  shuffleDeck,
+  updateHandScores,
+  getTopCard,
+  addCardToHand,
+} from "./gameLogic.js";
 
 import { initializeSubscriptions } from "./subscriptions.js";
 
 initializeSubscriptions();
 
-const dealCardBtn = document.getElementById("deal-hand-button");
-const testBtn = document.getElementById("test-button");
+const dealCardBtn = document.getElementById("deal-hand-btn");
+const testBtn = document.getElementById("test-btn");
 const wagerForm = document.getElementById("wager-form");
 const wagerInput = document.getElementById("wager-input");
+
+const hitBtn = document.getElementById("hit-btn");
 
 // Handle wager submission
 wagerForm.addEventListener("submit", (event) => {
@@ -51,21 +58,32 @@ wagerForm.addEventListener("submit", (event) => {
 
 testBtn.addEventListener("click", () => {
   // testElement();
-  dealCard("dealerHand", "dealerHand");
+  dealCard("focusHand");
 });
+
+// Player actions
 
 dealCardBtn.addEventListener("click", () => {
   // Wait for the first dealCard to finish
-  dealCard("focusHand", "userHandOne");
-  dealCard("dealerHand", "dealerHand");
+  dealCard("focusHand");
+  dealCard("dealerHand");
   setTimeout(() => {
-    dealCard("focusHand", "userHandOne");
-    dealCard("dealerHand", "dealerHand");
+    dealCard("focusHand");
+    dealCard("dealerHand");
   }, 2000);
 });
 
-function dealCard(handKey, hand) {
+hitBtn.addEventListener("click", () => {
+  hit();
+});
+
+function dealCard(hand) {
   const topCard = getTopCard();
-  console.log(topCard);
-  return animateDealCard(topCard, handKey, hand);
+  addCardToHand(topCard, hand);
+  updateHandScores();
+  return animateDealCard(topCard, hand);
+}
+
+function hit() {
+  dealCard("focusHand");
 }

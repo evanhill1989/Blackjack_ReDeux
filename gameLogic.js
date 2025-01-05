@@ -40,6 +40,46 @@ export function getTopCard() {
   return topCard;
 }
 
+export function addCardToHand(topCard, hand) {
+  const { userHandOne, userHandTwo, dealerHand, focus, nonFocus } =
+    state.getState();
+
+  // console.log(hand, "hand inside addCardToHand");
+  // console.log(focus, "focus inside addCardToHand");
+  // console.log(dealerHand, "dealerHand inside addCardToHand");
+  // console.log(userHandOne, "userHandOne inside addCardToHand");
+  // console.log(userHandTwo, "userHandTwo inside addCardToHand");
+
+  // do i want to make this be reusable for my split and double scenarios? Probably
+  // so i need to check if focus is userHandOne or userHandTwo
+  // Essentially I need to convert hand to a key
+
+  let handKey = hand === "focusHand" ? focus : "dealerHand";
+
+  let updatedHand;
+  if (handKey === "userHandOne") {
+    updatedHand = {
+      ...userHandOne,
+      cards: [...userHandOne.cards, topCard],
+    };
+  } else if (handKey === "userHandTwo") {
+    updatedHand = {
+      ...userHandTwo,
+      cards: [...userHandTwo.cards, topCard],
+    };
+  } else if (handKey === "dealerHand") {
+    updatedHand = {
+      ...dealerHand,
+      cards: [...dealerHand.cards, topCard],
+    };
+  } else {
+    console.error("Invalid hand key");
+    return;
+  }
+
+  state.setState({ [handKey]: updatedHand });
+}
+
 export function updateHandScores() {
   // TODO: why can't this be a subscription without too much recursion?
 
