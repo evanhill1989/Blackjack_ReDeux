@@ -84,6 +84,13 @@ export function animateDealCard(topCard, targetHandKey) {
   // Get the position of the deck and the target hand
   const deckRect = deckElement.getBoundingClientRect();
   const targetRect = targetHandElement.getBoundingClientRect();
+  const parentRect = deckElement.offsetParent.getBoundingClientRect(); // Parent container
+
+  // Calculate relative positions
+  const targetTop = targetRect.top - parentRect.top;
+  const targetLeft = targetRect.left - parentRect.left;
+  const deckTop = deckRect.top - parentRect.top;
+  const deckLeft = deckRect.left - parentRect.left;
 
   // Append the animated card to the deck (for the animation)
   deckElement.appendChild(topCardElement);
@@ -91,8 +98,8 @@ export function animateDealCard(topCard, targetHandKey) {
   // Set initial position for the animated card
   gsap.set(topCardElement, {
     position: "absolute",
-    top: deckRect.top + "px",
-    left: deckRect.left + "px",
+    top: deckTop + "px",
+    left: deckLeft + "px",
     width: topCardElement.offsetWidth + "px",
     height: topCardElement.offsetHeight + "px",
     zIndex: 1000,
@@ -101,8 +108,8 @@ export function animateDealCard(topCard, targetHandKey) {
   // Animate the card moving to the target hand
   gsap.to(topCardElement, {
     duration: 0.5,
-    top: targetRect.top + "px",
-    left: targetRect.left + "px",
+    top: targetTop + "px",
+    left: targetLeft + "px",
     onComplete: () => {
       // Remove the animated card
       deckElement.removeChild(topCardElement);

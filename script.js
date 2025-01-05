@@ -17,55 +17,51 @@ initializeSubscriptions();
 
 const dealCardBtn = document.getElementById("deal-hand-button");
 const testBtn = document.getElementById("test-button");
+const wagerForm = document.getElementById("wager-form");
+const wagerInput = document.getElementById("wager-input");
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Select form and input
-  const wagerForm = document.getElementById("wager-form");
-  const wagerInput = document.getElementById("wager-input");
+// Handle wager submission
+wagerForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const { bankroll } = state.getState();
 
-  // Initialize UI
+  // Capture wager value
+  const wager = parseInt(wagerInput.value, 10) || 50;
+  if (wager > 0 && wager <= bankroll) {
+    // Update state
+    const { bankroll, currentWager } = state.getState();
+    state.setState({ currentWager: wager, bankroll: bankroll - wager });
 
-  shuffleDeck();
-  shuffleDeck();
-  shuffleDeck();
+    // Update UI
+    updateBankrollDisplay(bankroll);
+    updateWagerDisplay(currentWager);
 
-  // Handle wager submission
-  wagerForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const { bankroll } = state.getState();
+    // Switch views
+    shuffleDeck();
+    toggleView();
 
-    // Capture wager value
-    const wager = parseInt(wagerInput.value, 10) || 50;
-    if (wager > 0 && wager <= bankroll) {
-      // Update state
-      const { bankroll, currentWager } = state.getState();
-      state.setState({ currentWager: wager, bankroll: bankroll - wager });
+    console.log(state);
+  } else {
+    alert("Please enter a valid wager amount.");
+  }
 
-      // Update UI
-      updateBankrollDisplay(bankroll);
-      updateWagerDisplay(currentWager);
-
-      // Switch views
-      toggleView();
-
-      console.log(state);
-    } else {
-      alert("Please enter a valid wager amount.");
-    }
-
-    // Reset input
-    wagerInput.value = "";
-  });
+  // Reset input
+  wagerInput.value = "";
 });
 
 testBtn.addEventListener("click", () => {
   // testElement();
-  dealCard("focusHand", "userHandOne");
+  dealCard("dealerHand", "dealerHand");
 });
 
-dealCardBtn.addEventListener("click", async () => {
+dealCardBtn.addEventListener("click", () => {
   // Wait for the first dealCard to finish
   dealCard("focusHand", "userHandOne");
+  dealCard("dealerHand", "dealerHand");
+  setTimeout(() => {
+    dealCard("focusHand", "userHandOne");
+    dealCard("dealerHand", "dealerHand");
+  }, 2000);
 });
 
 function dealCard(handKey, hand) {

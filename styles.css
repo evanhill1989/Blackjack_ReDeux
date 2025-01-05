@@ -137,6 +137,7 @@ form {
 }
 
 .cards {
+  height: 6em;
   display: grid;
   grid-template-columns: repeat(12, minmax(10px, 1fr));
   position: relative;
