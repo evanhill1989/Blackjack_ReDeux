@@ -2,6 +2,7 @@ import { state } from "./state.js";
 import {
   animateDealCard,
   showOverlay,
+  clearCardDisplay,
   updateBankrollDisplay,
   updateWagerDisplay,
 } from "./ui.js";
@@ -29,25 +30,6 @@ export function shuffleDeck() {
   }
 
   state.setState({ deck: shuffledDeck });
-}
-
-export function captureWager(wagerInputValue) {
-  const wager = parseInt(wagerInputValue, 10) || 50;
-  const { bankroll } = state.getState();
-  if (wager > 0 && wager <= bankroll) {
-    // Batch updates and include a callback
-    state.setState(
-      {
-        currentWager: wager,
-        bankroll: bankroll - wager,
-      },
-      () => {
-        // Update UI after state update
-        updateBankrollDisplay();
-        updateWagerDisplay();
-      }
-    );
-  }
 }
 
 export function getTopCard(staticTestCard) {
@@ -174,7 +156,7 @@ export function dealerAction() {
 function dealDealerCard(topCard) {
   addCardToHand(topCard, "dealerHand");
   updateHandScores();
-  return animateDealCard(topCard, "dealerHand");
+  animateDealCard(topCard, "dealerHand");
 }
 
 export function handleBust(hand) {
@@ -243,13 +225,19 @@ function compareScores() {
   }
 }
 
-export function updateBankroll() {
-  // update bankroll
-  console.log("update bankroll");
-}
+export function handlePayouts() {
+  const stateData = state.getState();
+  if (stateData.userHandOne.outcome === "win") {
+    state.setState({ bankroll: bankroll + wager * 2 });
+  } else if (stateData.userHandOne.outcome === "push") {
+    state.setState({ bankroll: bankroll + wager });
+  }
 
-export function resetHands() {
-  console.log("reset hands");
+  if (stateData.userHandTwo.outcome === "win") {
+    state.setState({ bankroll: bankroll + wager * 2 });
+  } else if (stateData.userHandTwo.outcome === "push") {
+    state.setState({ bankroll: bankroll + wager });
+  }
 }
 
 // Split Logic

@@ -194,3 +194,11 @@ export function showOverlay(message, duration = 1000) {
 }
 
 // Split-Double UI
+
+// End Game Funcs
+
+export function clearCardDisplay() {
+  dealerCards.innerHTML = "";
+  focusCards.innerHTML = "";
+  nonFocusCards.innerHTML = "";
+}

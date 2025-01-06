@@ -7,6 +7,7 @@ import {
   renderDeck,
   animateDealCard,
   testElement,
+  clearCardDisplay,
 } from "./ui.js";
 
 import {
@@ -17,9 +18,7 @@ import {
   dealerAction,
   showdown,
   handleBust,
-  updateBankroll,
-  resetHands,
-  captureWager,
+  handlePayouts,
 } from "./gameLogic.js";
 
 import { initializeSubscriptions } from "./subscriptions.js";
@@ -69,12 +68,7 @@ testBtn.addEventListener("click", () => {
 dealCardBtn.addEventListener("click", () => {
   // Wait for the first dealCard to finish
   // staticCardTemplate { suit: "♥", value: "J" }
-  dealCard("focusHand");
-  dealCard("dealerHand", { suit: "♣", value: "J" });
-  setTimeout(() => {
-    dealCard("focusHand");
-    dealCard("dealerHand", { suit: "♦", value: "5" });
-  }, 2000);
+  dealInitialCards();
 });
 
 hitBtn.addEventListener("click", () => {
@@ -92,6 +86,15 @@ splitBtn.addEventListener("click", () => {
 doubleBtn.addEventListener("click", () => {
   double();
 });
+
+function dealInitialCards() {
+  dealCard("focusHand");
+  dealCard("dealerHand", { suit: "♣", value: "J" });
+  setTimeout(() => {
+    dealCard("focusHand");
+    dealCard("dealerHand", { suit: "♦", value: "5" });
+  }, 2000);
+}
 
 function dealCard(hand, staticTestCard) {
   const topCard = getTopCard(staticTestCard);
@@ -127,7 +130,7 @@ function stand() {
     dealerAction();
     handleBust();
     showdown(); // determine winner
-    updateBankroll(); // update bankroll based on outcome from showdown
+    handlePayouts(); // update bankroll based on outcome from showdown
     resetHands(); // reset game state
   } else {
     handleBust();
@@ -155,4 +158,41 @@ function double() {
   //   // compare scores
   //   // update bankroll
   //   // reset game state
+}
+
+// End Game Funcs
+
+function resetHands() {
+  // Clear the dealer and user hands
+  state.setState({
+    dealerHand: { cards: [], score: 0 },
+    userHandOne: { cards: [], score: 0 },
+    userHandTwo: { cards: [], score: 0 },
+  });
+
+  // Check if the deck needs to be reshuffled
+  const { deck } = state.getState();
+  if (deck.length < 21) {
+    state.setState({
+      deck: [
+        { suit: "♥", value: "2" },
+        { suit: "♥", value: "3" }, // ... all 52 cards
+        { suit: "♠", value: "A" },
+      ],
+    });
+    shuffleDeck(); // Reshuffle the new deck
+  }
+
+  // Deduct the wager again
+  const { bankroll, currentWager } = state.getState();
+  if (currentWager <= bankroll) {
+    state.setState({
+      bankroll: bankroll - currentWager,
+    });
+  } else {
+    console.error("Not enough bankroll to continue the game.");
+  }
+
+  // Clear displayed cards from the previous hand
+  clearCardDisplay();
 }
