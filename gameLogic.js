@@ -150,11 +150,32 @@ function dealDealerCard(topCard) {
   return animateDealCard(topCard, "dealerHand");
 }
 
-function showdown() {
+export function handleBust(hand) {
+  // const { userHandOne, userHandTwo, dealerHand } = state.getState();
+  console.log("handleBust running");
+  let handKey = hand === "focusHand" ? state.getState().focus : "dealerHand";
+  let handScore = state.getState()[handKey].score;
+
+  if (handScore > 21) {
+    console.log(`${handKey} busts`);
+  }
+}
+
+export function showdown() {
   compareScores();
 }
 
 function compareScores() {
   let focusScore = state.focusHand.score;
+  let dealerScore = state.getState().dealerHand.score;
   console.log(focusScore, "focusScore");
+  console.log(dealerScore, "dealerScore");
+
+  if (focusScore > dealerScore) {
+    console.log("Focus wins");
+  } else if (focusScore < dealerScore) {
+    console.log("Dealer wins");
+  } else {
+    console.log("Push");
+  }
 }

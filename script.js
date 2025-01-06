@@ -15,6 +15,8 @@ import {
   getTopCard,
   addCardToHand,
   dealerAction,
+  showdown,
+  handleBust,
 } from "./gameLogic.js";
 
 import { initializeSubscriptions } from "./subscriptions.js";
@@ -97,7 +99,9 @@ function dealCard(hand) {
   const topCard = getTopCard();
   addCardToHand(topCard, hand);
   updateHandScores();
-  return animateDealCard(topCard, hand);
+
+  animateDealCard(topCard, hand);
+  handleBust(hand);
 }
 
 function hit() {
@@ -107,6 +111,7 @@ function hit() {
 function stand() {
   console.log("stand");
   dealerAction();
+  showdown();
   // end the game
   // compare scores
   // update bankroll
