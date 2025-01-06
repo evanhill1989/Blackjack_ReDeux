@@ -7,14 +7,17 @@ class State {
       dealerHand: {
         cards: [],
         score: 0,
+        outcome: null,
       },
       userHandOne: {
         cards: [],
         score: 0,
+        outcome: null,
       },
       userHandTwo: {
         cards: [],
         score: 0,
+        outcome: null,
       },
       focus: "userHandOne", // "userHandOne" or "userHandTwo"
       nonFocus: "userHandTwo", // "userHandOne" or "userHandTwo"

@@ -95,8 +95,8 @@ doubleBtn.addEventListener("click", () => {
   double();
 });
 
-function dealCard(hand) {
-  const topCard = getTopCard();
+function dealCard(hand, staticTestCard) {
+  const topCard = getTopCard(staticTestCard);
   addCardToHand(topCard, hand);
   updateHandScores();
 

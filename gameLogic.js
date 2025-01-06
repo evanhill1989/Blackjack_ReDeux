@@ -25,7 +25,10 @@ export function shuffleDeck() {
   state.setState({ deck: shuffledDeck });
 }
 
-export function getTopCard() {
+export function getTopCard(staticTestCard) {
+  if (staticTestCard) {
+    return staticTestCard;
+  }
   const { deck } = state.getState();
 
   if (!deck || deck.length === 0) {
@@ -133,7 +136,8 @@ export function computeHandScore(cards) {
 // End game logic
 export function dealerAction() {
   while (state.getState().dealerHand.score < 17) {
-    const topCard = getTopCard();
+    let staticTestCard = { suit: "♥", value: "J" };
+    const topCard = getTopCard(staticTestCard);
     dealDealerCard(topCard);
 
     // Ensure the state is updated with the new score after the card is dealt
@@ -151,7 +155,15 @@ function dealDealerCard(topCard) {
 }
 
 export function handleBust(hand) {
-  checkBust();
+  let didBust = checkBust();
+  if (didBust) {
+    showOverlay(didBust, 1500);
+    // end the game
+    // compare scores
+    // update bankroll
+    // reset game state
+  }
+  // am i setting a state or passing a parameter?
 }
 
 function checkBust() {
@@ -159,9 +171,9 @@ function checkBust() {
   const focusHand = state.focusHand;
 
   if (dealerHand.score > 21) {
-    showOverlay("Dealer Busts!", 1500); // 1.5 seconds duration
+    return "Dealer Busts";
   } else if (focusHand.score > 21) {
-    showOverlay("You Bust!", 1500);
+    return "You Bust";
   }
 }
 
