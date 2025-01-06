@@ -4,6 +4,9 @@ import { state } from "./state.js";
 const wagerView = document.getElementById("wager-view");
 const gameboardView = document.getElementById("gameboard-view");
 const bankrollDisplay = document.getElementById("bankroll-amount");
+const gameboardBankrollDisplay = document.getElementById(
+  "gameboard-bankroll-amount"
+);
 const currentWagerDisplay = document.getElementById("current-wager");
 const deckElement = document.getElementById("deck");
 const dealerCards = document.getElementById("dealer-cards");
@@ -16,7 +19,9 @@ const nonFocusHandScore = document.getElementById("non-focus-hand-score");
 // Display Functions
 export function updateBankrollDisplay() {
   const { bankroll } = state.getState();
+  console.log(bankroll);
   bankrollDisplay.textContent = `$${bankroll}`;
+  gameboardBankrollDisplay.textContent = `$${bankroll}`;
 }
 
 export function updateWagerDisplay() {

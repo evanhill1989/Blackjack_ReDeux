@@ -96,9 +96,10 @@ class State {
     return this.state;
   }
 
-  setState(newState) {
+  setState(newState, callback) {
     this.state = { ...this.state, ...newState };
     this.notify();
+    if (callback) callback(this.state); // Execute the callback
   }
 
   subscribe(listener) {

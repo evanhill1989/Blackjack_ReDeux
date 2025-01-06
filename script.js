@@ -17,6 +17,9 @@ import {
   dealerAction,
   showdown,
   handleBust,
+  updateBankroll,
+  resetHands,
+  captureWager,
 } from "./gameLogic.js";
 
 import { initializeSubscriptions } from "./subscriptions.js";
@@ -33,30 +36,24 @@ const standBtn = document.getElementById("stand-btn");
 const splitBtn = document.getElementById("split-btn");
 const doubleBtn = document.getElementById("double-btn");
 
+// set the bankroll display on load
+updateBankrollDisplay();
+
 // Handle wager submission
 wagerForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  const { bankroll } = state.getState();
 
   // Capture wager value
-  const wager = parseInt(wagerInput.value, 10) || 50;
-  if (wager > 0 && wager <= bankroll) {
-    // Update state
-    const { bankroll, currentWager } = state.getState();
-    state.setState({ currentWager: wager, bankroll: bankroll - wager });
+  handleWager(wagerInput.value);
 
-    // Update UI
-    updateBankrollDisplay(bankroll);
-    updateWagerDisplay(currentWager);
+  updateWagerDisplay();
+  updateBankrollDisplay();
 
-    // Switch views
-    shuffleDeck();
-    toggleView();
+  // Switch views
+  shuffleDeck();
+  toggleView();
 
-    console.log(state);
-  } else {
-    alert("Please enter a valid wager amount.");
-  }
+  console.log(state);
 
   // Reset input
   wagerInput.value = "";
@@ -64,7 +61,7 @@ wagerForm.addEventListener("submit", (event) => {
 
 testBtn.addEventListener("click", () => {
   // testElement();
-  dealCard("focusHand");
+  updateBankrollDisplay();
 });
 
 // Player actions
@@ -104,6 +101,21 @@ function dealCard(hand, staticTestCard) {
   animateDealCard(topCard, hand);
 }
 
+// Game Start setup
+function handleWager(wagerInputValue) {
+  const wager = parseInt(wagerInputValue, 10) || 50;
+  const { bankroll } = state.getState();
+  if (wager > 0 && wager <= bankroll) {
+    // Batch updates and include a callback
+    state.setState({
+      currentWager: wager,
+      bankroll: bankroll - wager,
+    });
+  }
+}
+
+// Game Actions
+
 function hit() {
   dealCard("focusHand");
 }
@@ -114,8 +126,11 @@ function stand() {
   if ("ready for end") {
     dealerAction();
     handleBust();
-    showdown();
+    showdown(); // determine winner
+    updateBankroll(); // update bankroll based on outcome from showdown
+    resetHands(); // reset game state
   } else {
+    handleBust();
     toggleFocusHand();
   }
 

@@ -1,6 +1,12 @@
 import { state } from "./state.js";
-import { animateDealCard, showOverlay } from "./ui.js";
+import {
+  animateDealCard,
+  showOverlay,
+  updateBankrollDisplay,
+  updateWagerDisplay,
+} from "./ui.js";
 
+// Begin Hand Logic
 export function shuffleDeck() {
   const { deck } = state.getState();
 
@@ -23,6 +29,25 @@ export function shuffleDeck() {
   }
 
   state.setState({ deck: shuffledDeck });
+}
+
+export function captureWager(wagerInputValue) {
+  const wager = parseInt(wagerInputValue, 10) || 50;
+  const { bankroll } = state.getState();
+  if (wager > 0 && wager <= bankroll) {
+    // Batch updates and include a callback
+    state.setState(
+      {
+        currentWager: wager,
+        bankroll: bankroll - wager,
+      },
+      () => {
+        // Update UI after state update
+        updateBankrollDisplay();
+        updateWagerDisplay();
+      }
+    );
+  }
 }
 
 export function getTopCard(staticTestCard) {
@@ -168,10 +193,14 @@ export function handleBust(hand) {
 function checkBust() {
   const { dealerHand } = state.getState();
   const focusHand = state.focusHand;
+  const focus = state.getState().focus;
 
   if (dealerHand.score > 21) {
+    state.setState({ dealerHand: { outcome: "Bust" } });
     return "Dealer Busts";
   } else if (focusHand.score > 21) {
+    // set outcome state using focus as key
+    state.setState({ [focus]: { outcome: "Bust" } });
     return "You Bust";
   } else {
     return "ooopsy";
@@ -179,20 +208,48 @@ function checkBust() {
 }
 
 export function showdown() {
-  compareScores();
+  if (state.getState().dealerHand.outcome === "Bust") {
+    console.log("Dealer Busts");
+  } else if (state.getState().focusHand.outcome === "Bust") {
+    console.log("You Bust");
+  } else {
+    compareScores();
+  }
 }
 
 function compareScores() {
-  let focusScore = state.focusHand.score;
-  let dealerScore = state.getState().dealerHand.score;
+  const stateData = state.getState();
+  const focusHandKey = stateData.focus; // "userHandOne" or "userHandTwo"
+  const focusScore = state.focusHand.score;
+  const dealerScore = stateData.dealerHand.score;
 
-  if (focusScore > dealerScore) {
-    console.log("Focus wins");
+  let outcome;
+
+  if (dealerScore > 21 || focusScore > dealerScore) {
+    outcome = "win";
   } else if (focusScore < dealerScore) {
-    console.log("Dealer wins");
+    outcome = "lose";
   } else {
-    console.log("Push");
+    outcome = "push";
+
+    state.setState({
+      [focusHandKey]: {
+        ...stateData[focusHandKey],
+        outcome,
+      },
+    });
+
+    console.log(`${focusHandKey} outcome:`, outcome);
   }
+}
+
+export function updateBankroll() {
+  // update bankroll
+  console.log("update bankroll");
+}
+
+export function resetHands() {
+  console.log("reset hands");
 }
 
 // Split Logic
