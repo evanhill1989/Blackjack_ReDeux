@@ -71,11 +71,12 @@ testBtn.addEventListener("click", () => {
 
 dealCardBtn.addEventListener("click", () => {
   // Wait for the first dealCard to finish
+  // staticCardTemplate { suit: "♥", value: "J" }
   dealCard("focusHand");
-  dealCard("dealerHand");
+  dealCard("dealerHand", { suit: "♣", value: "J" });
   setTimeout(() => {
     dealCard("focusHand");
-    dealCard("dealerHand");
+    dealCard("dealerHand", { suit: "♦", value: "5" });
   }, 2000);
 });
 
@@ -101,7 +102,6 @@ function dealCard(hand, staticTestCard) {
   updateHandScores();
 
   animateDealCard(topCard, hand);
-  handleBust(hand);
 }
 
 function hit() {
@@ -110,8 +110,15 @@ function hit() {
 
 function stand() {
   console.log("stand");
-  dealerAction();
-  showdown();
+
+  if ("ready for end") {
+    dealerAction();
+    handleBust();
+    showdown();
+  } else {
+    toggleFocusHand();
+  }
+
   // end the game
   // compare scores
   // update bankroll

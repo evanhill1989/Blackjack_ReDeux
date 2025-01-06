@@ -144,8 +144,6 @@ export function dealerAction() {
     const { dealerHand } = state.getState();
     console.log(`Dealer's new score: ${dealerHand.score}`);
   }
-
-  showdown();
 }
 
 function dealDealerCard(topCard) {
@@ -156,6 +154,7 @@ function dealDealerCard(topCard) {
 
 export function handleBust(hand) {
   let didBust = checkBust();
+  console.log(didBust);
   if (didBust) {
     showOverlay(didBust, 1500);
     // end the game
@@ -174,6 +173,8 @@ function checkBust() {
     return "Dealer Busts";
   } else if (focusHand.score > 21) {
     return "You Bust";
+  } else {
+    return "ooopsy";
   }
 }
 
@@ -184,8 +185,6 @@ export function showdown() {
 function compareScores() {
   let focusScore = state.focusHand.score;
   let dealerScore = state.getState().dealerHand.score;
-  console.log(focusScore, "focusScore");
-  console.log(dealerScore, "dealerScore");
 
   if (focusScore > dealerScore) {
     console.log("Focus wins");
@@ -194,4 +193,11 @@ function compareScores() {
   } else {
     console.log("Push");
   }
+}
+
+// Split Logic
+
+export function toggleFocusHand() {
+  const { focus, nonFocus } = state.getState();
+  state.setState({ focus: nonFocus, nonFocus: focus });
 }
