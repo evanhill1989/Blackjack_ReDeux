@@ -165,3 +165,25 @@ export function renderDeck() {
 }
 
 // map over the deck object and create a deck of cards out of card elements
+
+export function showOverlay(message, duration = 1000) {
+  // Get the overlay element or create one if it doesn't exist
+  let overlay = document.getElementById("game-overlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.id = "game-overlay";
+    overlay.classList.add("hidden");
+    document.body.appendChild(overlay);
+  }
+
+  // Set the message text
+  overlay.textContent = message;
+
+  // Display the overlay
+  overlay.classList.add("show");
+
+  // Hide the overlay after the specified duration
+  setTimeout(() => {
+    overlay.classList.remove("show");
+  }, duration);
+}

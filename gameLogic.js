@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { animateDealCard } from "./ui.js";
+import { animateDealCard, showOverlay } from "./ui.js";
 
 export function shuffleDeck() {
   const { deck } = state.getState();
@@ -151,13 +151,17 @@ function dealDealerCard(topCard) {
 }
 
 export function handleBust(hand) {
-  // const { userHandOne, userHandTwo, dealerHand } = state.getState();
-  console.log("handleBust running");
-  let handKey = hand === "focusHand" ? state.getState().focus : "dealerHand";
-  let handScore = state.getState()[handKey].score;
+  checkBust();
+}
 
-  if (handScore > 21) {
-    console.log(`${handKey} busts`);
+function checkBust() {
+  const { dealerHand } = state.getState();
+  const focusHand = state.focusHand;
+
+  if (dealerHand.score > 21) {
+    showOverlay("Dealer Busts!", 1500); // 1.5 seconds duration
+  } else if (focusHand.score > 21) {
+    showOverlay("You Bust!", 1500);
   }
 }
 
