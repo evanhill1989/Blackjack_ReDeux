@@ -21,6 +21,8 @@ import {
   handlePayouts,
 } from "./gameLogic.js";
 
+console.log("running script.js again");
+
 import { initializeSubscriptions } from "./subscriptions.js";
 
 initializeSubscriptions();
@@ -61,6 +63,7 @@ wagerForm.addEventListener("submit", (event) => {
 testBtn.addEventListener("click", () => {
   // testElement();
   updateBankrollDisplay();
+  console.log(state.getState());
 });
 
 // Player actions
@@ -123,29 +126,29 @@ function hit() {
   dealCard("focusHand");
 }
 
-function stand() {
+async function stand() {
   console.log("stand");
 
   if ("ready for end") {
-    dealerAction();
-    handleBust();
-    showdown(); // determine winner
-    handlePayouts(); // update bankroll based on outcome from showdown
-    resetHands(); // reset game state
+    console.log("Am I running this stuff lol?");
+    await dealerAction(); // Wait for dealer action to finish
+    await handleBust(); // Wait for bust handling to complete
+    await showdown(); // Wait for winner determination
+    await handlePayouts(); // Wait for bankroll updates
+    await resetHands(); // Finally, reset the game state
   } else {
-    handleBust();
+    await handleBust();
     toggleFocusHand();
   }
-
   // end the game
   // compare scores
   // update bankroll
   // reset game state
 }
 
-// function split() {
-//   console.log("split");
-// }
+function split() {
+  console.log("split");
+}
 
 function double() {
   console.log("double");
@@ -163,36 +166,81 @@ function double() {
 // End Game Funcs
 
 function resetHands() {
-  // Clear the dealer and user hands
-  state.setState({
-    dealerHand: { cards: [], score: 0 },
-    userHandOne: { cards: [], score: 0 },
-    userHandTwo: { cards: [], score: 0 },
+  return new Promise((resolve) => {
+    const stateData = state.getState();
+    console.log(stateData, "<---- state data inside resetHands...");
+    // Clear hands and prepare for the next round
+    state.setState({
+      dealerHand: { cards: [], score: 0 },
+      userHandOne: { cards: [], score: 0 },
+      userHandTwo: { cards: [], score: 0 },
+    });
+
+    // Clear UI
+    clearCardDisplay();
+
+    // Check if deck needs reshuffling
+    const { deck } = state.getState();
+    if (deck.length < 21) {
+      state.setState({
+        deck: [
+          { suit: "♥", value: "2" },
+          { suit: "♥", value: "3" },
+          { suit: "♥", value: "4" },
+          { suit: "♥", value: "5" },
+          { suit: "♥", value: "6" },
+          { suit: "♥", value: "7" },
+          { suit: "♥", value: "8" },
+          { suit: "♥", value: "9" },
+          { suit: "♥", value: "10" },
+          { suit: "♥", value: "J" },
+          { suit: "♥", value: "Q" },
+          { suit: "♥", value: "K" },
+          { suit: "♥", value: "A" },
+          { suit: "♦", value: "2" },
+          { suit: "♦", value: "3" },
+          { suit: "♦", value: "4" },
+          { suit: "♦", value: "5" },
+          { suit: "♦", value: "6" },
+          { suit: "♦", value: "7" },
+          { suit: "♦", value: "8" },
+          { suit: "♦", value: "9" },
+          { suit: "♦", value: "10" },
+          { suit: "♦", value: "J" },
+          { suit: "♦", value: "Q" },
+          { suit: "♦", value: "K" },
+          { suit: "♦", value: "A" },
+          { suit: "♣", value: "2" },
+          { suit: "♣", value: "3" },
+          { suit: "♣", value: "4" },
+          { suit: "♣", value: "5" },
+          { suit: "♣", value: "6" },
+          { suit: "♣", value: "7" },
+          { suit: "♣", value: "8" },
+          { suit: "♣", value: "9" },
+          { suit: "♣", value: "10" },
+          { suit: "♣", value: "J" },
+          { suit: "♣", value: "Q" },
+          { suit: "♣", value: "K" },
+          { suit: "♣", value: "A" },
+          { suit: "♠", value: "2" },
+          { suit: "♠", value: "3" },
+          { suit: "♠", value: "4" },
+          { suit: "♠", value: "5" },
+          { suit: "♠", value: "6" },
+          { suit: "♠", value: "7" },
+          { suit: "♠", value: "8" },
+          { suit: "♠", value: "9" },
+          { suit: "♠", value: "10" },
+          { suit: "♠", value: "J" },
+          { suit: "♠", value: "Q" },
+          { suit: "♠", value: "K" },
+          { suit: "♠", value: "A" },
+        ],
+      });
+      shuffleDeck();
+    }
+
+    resolve(); // Reset complete
   });
-
-  // Check if the deck needs to be reshuffled
-  const { deck } = state.getState();
-  if (deck.length < 21) {
-    state.setState({
-      deck: [
-        { suit: "♥", value: "2" },
-        { suit: "♥", value: "3" }, // ... all 52 cards
-        { suit: "♠", value: "A" },
-      ],
-    });
-    shuffleDeck(); // Reshuffle the new deck
-  }
-
-  // Deduct the wager again
-  const { bankroll, currentWager } = state.getState();
-  if (currentWager <= bankroll) {
-    state.setState({
-      bankroll: bankroll - currentWager,
-    });
-  } else {
-    console.error("Not enough bankroll to continue the game.");
-  }
-
-  // Clear displayed cards from the previous hand
-  clearCardDisplay();
 }

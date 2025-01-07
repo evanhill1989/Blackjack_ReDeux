@@ -19,7 +19,7 @@ const nonFocusHandScore = document.getElementById("non-focus-hand-score");
 // Display Functions
 export function updateBankrollDisplay() {
   const { bankroll } = state.getState();
-  console.log(bankroll);
+
   bankrollDisplay.textContent = `$${bankroll}`;
   gameboardBankrollDisplay.textContent = `$${bankroll}`;
 }
@@ -68,52 +68,46 @@ export function createCard(card) {
 }
 
 export function animateDealCard(topCard, targetHandKey) {
-  let targetHandElement =
-    targetHandKey === "focusHand" ? focusCards : dealerCards;
+  return new Promise((resolve) => {
+    let targetHandElement =
+      targetHandKey === "focusHand" ? focusCards : dealerCards;
 
-  // Create the animated card and its clone
-  const topCardElement = createCard(topCard);
-  const clonedCardElement = topCardElement.cloneNode(true); // Clone the card
+    const topCardElement = createCard(topCard);
+    const clonedCardElement = topCardElement.cloneNode(true);
 
-  clonedCardElement.classList.toggle("flipped");
-  topCardElement.classList.toggle("flipped");
+    clonedCardElement.classList.toggle("flipped");
+    topCardElement.classList.toggle("flipped");
 
-  // Get the position of the deck and the target hand
-  const deckRect = deckElement.getBoundingClientRect();
-  const targetRect = targetHandElement.getBoundingClientRect();
-  const parentRect = deckElement.offsetParent.getBoundingClientRect(); // Parent container
+    const deckRect = deckElement.getBoundingClientRect();
+    const targetRect = targetHandElement.getBoundingClientRect();
+    const parentRect = deckElement.offsetParent.getBoundingClientRect();
 
-  // Calculate relative positions
-  const targetTop = targetRect.top - parentRect.top;
-  const targetLeft = targetRect.left - parentRect.left;
-  const deckTop = deckRect.top - parentRect.top;
-  const deckLeft = deckRect.left - parentRect.left;
+    const targetTop = targetRect.top - parentRect.top;
+    const targetLeft = targetRect.left - parentRect.left;
+    const deckTop = deckRect.top - parentRect.top;
+    const deckLeft = deckRect.left - parentRect.left;
 
-  // Append the animated card to the deck (for the animation)
-  deckElement.appendChild(topCardElement);
+    deckElement.appendChild(topCardElement);
 
-  // Set initial position for the animated card
-  gsap.set(topCardElement, {
-    position: "absolute",
-    top: deckTop + "px",
-    left: deckLeft + "px",
-    width: topCardElement.offsetWidth + "px",
-    height: topCardElement.offsetHeight + "px",
-    zIndex: 1000,
-  });
+    gsap.set(topCardElement, {
+      position: "absolute",
+      top: deckTop + "px",
+      left: deckLeft + "px",
+      width: topCardElement.offsetWidth + "px",
+      height: topCardElement.offsetHeight + "px",
+      zIndex: 1000,
+    });
 
-  // Animate the card moving to the target hand
-  gsap.to(topCardElement, {
-    duration: 0.5,
-    top: targetTop + "px",
-    left: targetLeft + "px",
-    onComplete: () => {
-      // Remove the animated card
-      deckElement.removeChild(topCardElement);
-
-      // Append the cloned card to the target hand
-      targetHandElement.appendChild(clonedCardElement);
-    },
+    gsap.to(topCardElement, {
+      duration: 0.5,
+      top: targetTop + "px",
+      left: targetLeft + "px",
+      onComplete: () => {
+        deckElement.removeChild(topCardElement);
+        targetHandElement.appendChild(clonedCardElement);
+        resolve(); // Resolve the promise when animation is complete
+      },
+    });
   });
 }
 

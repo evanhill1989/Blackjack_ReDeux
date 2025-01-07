@@ -141,35 +141,37 @@ export function computeHandScore(cards) {
 }
 
 // End game logic
-export function dealerAction() {
+export async function dealerAction() {
   while (state.getState().dealerHand.score < 17) {
     let staticTestCard = { suit: "♥", value: "J" };
     const topCard = getTopCard(staticTestCard);
-    dealDealerCard(topCard);
 
-    // Ensure the state is updated with the new score after the card is dealt
+    await dealDealerCard(topCard); // Wait for the card animation to complete
+
     const { dealerHand } = state.getState();
-    console.log(`Dealer's new score: ${dealerHand.score}`);
   }
 }
 
 function dealDealerCard(topCard) {
   addCardToHand(topCard, "dealerHand");
   updateHandScores();
-  animateDealCard(topCard, "dealerHand");
+  return animateDealCard(topCard, "dealerHand"); // Return the promise
 }
 
 export function handleBust(hand) {
-  let didBust = checkBust();
-  console.log(didBust);
-  if (didBust) {
-    showOverlay(didBust, 1500);
-    // end the game
-    // compare scores
-    // update bankroll
-    // reset game state
-  }
-  // am i setting a state or passing a parameter?
+  return new Promise((resolve) => {
+    let didBust = checkBust();
+
+    if (didBust) {
+      showOverlay(didBust, 1500);
+
+      // end the game
+      // compare scores
+      // update bankroll
+      // reset game state
+    }
+    resolve();
+  });
 }
 
 function checkBust() {
@@ -185,18 +187,16 @@ function checkBust() {
     state.setState({ [focus]: { outcome: "Bust" } });
     return "You Bust";
   } else {
-    return "ooopsy";
+    return false;
   }
 }
 
 export function showdown() {
-  if (state.getState().dealerHand.outcome === "Bust") {
-    console.log("Dealer Busts");
-  } else if (state.getState().focusHand.outcome === "Bust") {
-    console.log("You Bust");
-  } else {
+  return new Promise((resolve) => {
     compareScores();
-  }
+
+    resolve();
+  });
 }
 
 function compareScores() {
@@ -205,10 +205,12 @@ function compareScores() {
   const focusScore = state.focusHand.score;
   const dealerScore = stateData.dealerHand.score;
 
+  console.log(stateData.dealerHand, "dealerHand obj in compareScores");
   let outcome;
 
   if (dealerScore > 21 || focusScore > dealerScore) {
     outcome = "win";
+    console.log("win from compareScores");
   } else if (focusScore < dealerScore) {
     outcome = "lose";
   } else {
@@ -226,18 +228,28 @@ function compareScores() {
 }
 
 export function handlePayouts() {
-  const stateData = state.getState();
-  if (stateData.userHandOne.outcome === "win") {
-    state.setState({ bankroll: bankroll + wager * 2 });
-  } else if (stateData.userHandOne.outcome === "push") {
-    state.setState({ bankroll: bankroll + wager });
-  }
+  return new Promise((resolve, reject) => {
+    const stateData = state.getState();
+    const bankroll = stateData.bankroll;
+    const wager = stateData.currentWager;
+    const handOneOutcome = stateData.userHandOne.outcome;
+    const handTwoOutcome = stateData.userHandTwo.outcome;
 
-  if (stateData.userHandTwo.outcome === "win") {
-    state.setState({ bankroll: bankroll + wager * 2 });
-  } else if (stateData.userHandTwo.outcome === "push") {
-    state.setState({ bankroll: bankroll + wager });
-  }
+    console.log(wager, "wager inside handlePayouts");
+
+    if (handOneOutcome === "win") {
+      state.setState({ bankroll: bankroll + wager * 2 });
+    } else if (handOneOutcome === "push") {
+      state.setState({ bankroll: bankroll + wager });
+    }
+
+    if (handTwoOutcome === "win") {
+      state.setState({ bankroll: bankroll + wager * 2 });
+    } else if (handTwoOutcome === "push") {
+      state.setState({ bankroll: bankroll + wager });
+    }
+    resolve();
+  });
 }
 
 // Split Logic
